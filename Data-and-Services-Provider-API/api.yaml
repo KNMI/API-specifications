@@ -1,0 +1,153 @@
+swagger: '2.0'
+info:
+  description: KNMI Data Catalogue API
+  version: 1.0.0
+  title: KNMI Data Catalogue API
+  # put the contact info for your development or API team
+  contact:
+    email: maarten.terpstra@knmi.nl
+
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+
+# tags are used for organizing operations
+tags:
+- name: admins
+  description: Secured Admin-only calls
+- name: developers
+  description: Operations available to regular developers
+
+parameters:
+  category_id:
+    name: category_id
+    in: path
+    description: The name of the category
+    type: string
+    required: true
+  product_id:
+    name: product_id
+    in: path
+    description: The identifier of the product
+    type: number
+    required: true
+  dataset_id: 
+    name: dataset_id
+    in: path
+    description: The identifier of a dataset
+    type: number
+    required: true
+
+paths:
+  /dataset_categories:
+    get:
+      responses:
+        200:
+          description: "Succesful operation - List of types of data categories"
+          schema:
+            type: "array"
+            items:
+              $ref: '#/definitions/dataset_category'
+  
+  /dataset_categories/{category_id}:
+    parameters:
+      - $ref: '#/parameters/category_id'
+    get:
+      responses:
+        200:
+          description: "Succesful operation - Description of the relevant category"
+          schema:
+            type: object
+            
+  /dataset_categories/{category_id}/product_types:
+    parameters:
+      - $ref: '#/parameters/category_id'
+    get:
+      responses:
+        200:
+          description: "Succesful operation - List of products types belonging to the category"
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/product_types'
+              
+  /dataset_categories/{category_id}/product_types/{product_id}:
+    parameters:
+      - $ref: '#/parameters/category_id'
+      - $ref: '#/parameters/product_id'
+    get:
+      responses:
+        200:
+          description: "Succesful operation - A specific object"
+          schema:
+            type: object
+            
+  /datasets:
+    get:
+      summary: "Retrieve all datasets in the catalogue"
+      description: ""
+      responses:
+        200:
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/dataset_item'
+  /datasets/{dataset_id}:
+    parameters: 
+      - $ref: '#parameters/dataset_id'
+    get:
+      summary: "Retrieve a specific dataset"
+      description: ""
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+      
+  
+      
+definitions:
+  dataset_category:
+    type: object
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      description:
+        type: string
+      
+  product_types:
+    type: object
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      description:
+        type: string
+        
+  dataset_item:
+    type: object
+    properties:
+      id: 
+        type: number
+      name: 
+        type: string
+      maintainer:
+        type: string
+      locator:
+        type: string
+      product_type:
+        type: string
+      
+      
+    
+    
+        
+# Added by API Auto Mocking Plugin
+host: api.knmi.nl
+basePath: /catalogus/v1
+schemes:
+ - https
