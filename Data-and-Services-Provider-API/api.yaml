@@ -37,10 +37,18 @@ parameters:
     description: The identifier of a dataset
     type: number
     required: true
+  service_type_id: 
+    name: service_type_id
+    in: path
+    description: The identifier of a service type
+    type: string
+    required: true
 
 paths:
   /dataset_categories:
     get:
+      tags: ['Dataset Discovery']
+      summary: "Retrieve all types of datasets"
       responses:
         200:
           description: "Succesful operation - List of types of data categories"
@@ -53,6 +61,8 @@ paths:
     parameters:
       - $ref: '#/parameters/category_id'
     get:
+      tags: ['Dataset Discovery']
+      summary: "Retrieve information about a certain data category"
       responses:
         200:
           description: "Succesful operation - Description of the relevant category"
@@ -63,6 +73,8 @@ paths:
     parameters:
       - $ref: '#/parameters/category_id'
     get:
+      tags: ['Dataset Discovery']
+      summary: "Retrieve possible products within a category"
       responses:
         200:
           description: "Succesful operation - List of products types belonging to the category"
@@ -76,6 +88,8 @@ paths:
       - $ref: '#/parameters/category_id'
       - $ref: '#/parameters/product_id'
     get:
+      tags: ['Dataset Discovery']
+      summary: "Retrieve information about a certain product"
       responses:
         200:
           description: "Succesful operation - A specific object"
@@ -84,6 +98,7 @@ paths:
             
   /datasets:
     get:
+      tags: ['Dataset Discovery']
       summary: "Retrieve all datasets in the catalogue"
       description: ""
       responses:
@@ -93,10 +108,12 @@ paths:
             type: array
             items:
               $ref: '#/definitions/dataset_item'
+              
   /datasets/{dataset_id}:
     parameters: 
       - $ref: '#parameters/dataset_id'
     get:
+      tags: ['Dataset Discovery']
       summary: "Retrieve a specific dataset"
       description: ""
       responses:
@@ -104,9 +121,33 @@ paths:
           description: OK
           schema:
             type: object
-      
-  
-      
+    
+  /services:
+    get:
+      tags: ['Service Discovery']
+      summary: "Retrieve all types of services"
+      responses:
+        200:
+          description: "Succesful operation - List of types of service types"
+          schema:
+            type: "array"
+            items:
+              $ref: '#/definitions/service_type'
+
+  /services/{service_type_id}:
+    parameters: 
+      - $ref: '#parameters/service_type_id'
+
+    get:
+      tags: ['Service Discovery']
+      summary: "Retrieve information about a specific service"
+      responses:
+        200:
+          description: "Succesful operation - Information about about a service type"
+          schema:
+            type: object
+
+
 definitions:
   dataset_category:
     type: object
@@ -142,12 +183,18 @@ definitions:
       product_type:
         type: string
       
+  service_type:
+    type: object
+    properties:
+      id:
+        type: integer
+      name: 
+        type: string
+      description:
+        type: string
       
-    
-    
-        
-# Added by API Auto Mocking Plugin
-host: api.knmi.nl
-basePath: /catalogus/v1
 schemes:
  - https
+ 
+host: api.knmi.nl
+basePath: /catalogus/v1
